@@ -1,10 +1,5 @@
 package weather;
 
-import retrofit2.Call;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
 //import java.util.logging.Logger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,36 +30,21 @@ public class WeatherStarter {
                 e.printStackTrace();
             }
         }
+        IpmaConnection con = new IpmaConnection(city_id);
+        IpmaCityForecast forecast = con.connection();
 
-        /*
-        get a retrofit instance, loaded with the GSon lib to convert JSON into objects
-         */
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://api.ipma.pt/open-data/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        IpmaService service = retrofit.create(IpmaService.class);
-        Call<IpmaCityForecast> callSync = service.getForecastForACity(city_id);
-
-        try {
-            Response<IpmaCityForecast> apiResponse = callSync.execute();
-            IpmaCityForecast forecast = apiResponse.body();
-
-            if (forecast != null) {
-                StringBuilder sb = new StringBuilder();
-                String log = sb.append("max temp for today: ")
-                                .append(forecast.getData().listIterator().next().getTMax())
-                                .append('\n')
-                                .append("min temp for today: ")
-                                .append(forecast.getData().listIterator().next().getTMin())
-                                .toString();
-                logger.info(log);
-            } else {
-                logger.info( "No results!");
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        if (forecast != null) {
+            StringBuilder sb = new StringBuilder();
+            String log = sb.append("max temp for today: ")
+                            .append(forecast.getData().listIterator().next().getTMax())
+                            .append('\n')
+                            .append("min temp for today: ")
+                            .append(forecast.getData().listIterator().next().getTMin())
+                            .toString();
+            logger.info(log);
+        } else {
+            logger.info( "No results!");
         }
 
     }
