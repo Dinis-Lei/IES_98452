@@ -18,14 +18,10 @@ Movies and Quotes are posted on "/api/addmovie" and "/api/addquotes" respectivel
 
 
 ## lab3_3 d)
-
-build:
-
-	docker build --build-arg JAR_FILE=target/*.jar -t myorg/myapp .
 	
 run:
 
-	docker run -p 9000:9000 myorg/myapp
+	docker-compose up
 
 
 ## REVIEW QUESTIONS
